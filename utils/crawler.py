@@ -10,8 +10,8 @@ def collect_unique_endpoints(match, href, endpoints: list):
         print(f"\n[*] Crawler: adding first endpoint {href}")
     # Appending links with unique first group
     counter = 0
-    for endpoint in endpoints:
-        if match.group(1) not in endpoint:
+    for endp in endpoints:
+        if match.group(1) not in endp:
             counter += 1
     if len(endpoints) == counter:
         endpoints.append(href)
