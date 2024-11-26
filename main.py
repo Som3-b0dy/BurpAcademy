@@ -1,6 +1,6 @@
 import sys
 
-from SQLi.url_param_sqli import *
+from SQLi.confirm_sqli import *
 
 def main():
    try:
@@ -8,7 +8,7 @@ def main():
       try_url_param_sqli(url)
    except IndexError:
       print("[!] url param is required")
-      print(f"[*] python3 {sys.argv[0]} <url>")
+      print(f"[!] python3 {sys.argv[0]} <url>")
 
 if __name__ == "__main__":
    main()
