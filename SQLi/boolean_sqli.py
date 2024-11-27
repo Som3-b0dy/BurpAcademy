@@ -13,6 +13,7 @@ def try_boolean_sqli(url, options: list):
     print(vuln_endpoints)
     for endp in vuln_endpoints:
         for pld in payloads:
+            # I should check for 200 status code here
             pld = requests.utils.quote(pld + db_comment)
             r = requests.get(url = url + endp + pld)
             print(url + endp + pld)

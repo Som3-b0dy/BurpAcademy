@@ -12,12 +12,14 @@ def try_url_param_sqli(url) -> list:
             r_1 = requests.get(url = url + endp + "'--")
             if r_1.status_code == 200:
                 print(f"[+] Confirmed SQLi is found on endpoint {endp}'--")
+                # Adding vulnerable endpoint to a list 
                 options[0].append(endp)
                 options[1] = "--"
                 options[2] = "True"
             r_2 = requests.get(url = url + endp + "'%23")
             if r_2.status_code == 200:
                 print(f"[+] Confirmed SQLi is found on endpoint {endp}'#")
+                # Adding vulnerable endpoint to a list 
                 options[0].append(endp)
                 options[1] = "#"
                 options[2] = "True"
