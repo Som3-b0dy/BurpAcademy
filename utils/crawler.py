@@ -1,7 +1,8 @@
-import requests
 import re
 
+import requests
 from bs4 import BeautifulSoup
+
 
 def collect_unique_endpoints(match, href, endpoints: list):
     # Initializing list with first link
@@ -17,6 +18,7 @@ def collect_unique_endpoints(match, href, endpoints: list):
         endpoints.append(href)
         print(f"[*] Crawler: adding unique endpoint {href}")
 
+
 def crawl_webpage_endpoints(url) -> list:
     endpoints = []
     r = requests.get(url)
@@ -27,4 +29,4 @@ def crawl_webpage_endpoints(url) -> list:
         match = re.search('\/(.+)\?(.+)\=(.+)', href)
         if match:
             collect_unique_endpoints(match, href, endpoints)
-    return endpoints 
+    return endpoints
