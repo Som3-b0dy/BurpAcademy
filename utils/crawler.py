@@ -3,20 +3,22 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from utils.auxiliary import *
+
 
 def collect_unique_endpoints(match, href, endpoints: list):
-    # Initializing list with first link
-    if len(endpoints) == 0:
+    l = Auxiliary(__name__)
+    l.set_config()
+    if len(endpoints) == 0:  # Initializing list with first link
         endpoints.append(href)
-        print(f"\n[*] Crawler: adding first endpoint {href}")
-    # Appending links with unique first group
+        l.logger.info(f"\n[*] Adding first endpoint {href}")
     counter = 0
-    for endp in endpoints:
+    for endp in endpoints:  # Appending links with unique first group
         if match.group(1) not in endp:
             counter += 1
     if len(endpoints) == counter:
         endpoints.append(href)
-        print(f"[*] Crawler: adding unique endpoint {href}")
+        l.logger.info(f"[*] Adding unique endpoint {href}")
 
 
 def crawl_webpage_endpoints(url) -> list:
