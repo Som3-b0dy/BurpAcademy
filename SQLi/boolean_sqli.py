@@ -11,8 +11,8 @@ payloads = [
 
 
 def try_boolean_sqli(url, options: list):
-    l = Auxiliary(__name__)
-    l.set_config()
+    log = Auxiliary(__name__)
+    log.set_config()
     vuln_endpoints = options[0]
     db_comment = options[1]
     init_r = requests.get(url=url)
@@ -21,13 +21,15 @@ def try_boolean_sqli(url, options: list):
             # URL encoding our payload
             pld = requests.utils.quote(pld + db_comment)
             r = requests.get(url=url + endp + pld)
-            l.logger.info(
+            log.logger.info(
                 f"[*] Trying blind SQLi on endpoint {url + endp + pld}")
             if r.status_code == 200:
                 # If new page size is bigger, we have found additional content
                 if len(r.text) > len(init_r.text):
-                    l.logger.info(
-                        f"[+] Confirmed blind SQLi on endpoint {url + endp + pld}")
-                    l.logger.info(
-                        f"[+] New page size is {len(r.text)} instead of default {len(init_r.text)}")
+                    log.logger.info(
+                        f"[+] Confirmed blind SQLi \
+                        on endpoint {url + endp + pld}")
+                    log.logger.info(
+                        f"[+] New page size is {len(r.text)} instead \
+                        of default {len(init_r.text)}")
                     return endp
