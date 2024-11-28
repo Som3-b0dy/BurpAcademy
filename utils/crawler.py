@@ -11,14 +11,14 @@ def collect_unique_endpoints(match, href, endpoints: list):
     log.set_config()
     if len(endpoints) == 0:  # Initializing list with first link
         endpoints.append(href)
-        log.logger.info(f"[*] Adding first endpoint {href}")
+        log.logger.info(f"{BLUE}[*]{RESET} Adding first endpoint {href}")
     counter = 0
     for endp in endpoints:  # Appending links with unique first group
         if match.group(1) not in endp:
             counter += 1
     if len(endpoints) == counter:
         endpoints.append(href)
-        log.logger.info(f"[*] Adding unique endpoint {href}")
+        log.logger.info(f"{BLUE}[*]{RESET} Adding unique endpoint {href}")
 
 
 def crawl_webpage_endpoints(url) -> list:

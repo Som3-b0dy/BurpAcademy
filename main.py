@@ -6,8 +6,6 @@ from utils.parser import *
 
 
 def main():
-    log = Auxiliary(moduleName=__name__)
-    log.set_config()
     args = parse_args()
     options = try_url_param_sqli(args.url)
     if options[2] == "True":
