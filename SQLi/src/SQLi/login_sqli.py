@@ -64,7 +64,7 @@ def try_login_password_sqli(url, s, csrf_token):
             "password": "'OR 1=1-- "
         }
         log.logger.info(
-            f"{BLUE}[*]{RESET} Trying login username SQLi on "
+            f"{BLUE}[*]{RESET} Trying login password SQLi on "
             f"endpoint {url + '/login'} with {data}")
         r = s.post(url=url + "/login", data=data)
         if r.status_code == 200:

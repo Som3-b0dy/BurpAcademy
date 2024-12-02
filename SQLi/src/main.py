@@ -7,10 +7,8 @@ from utils.parser import *
 
 def main():
     args = parse_args()
-    options = try_url_param_sqli(args.url)
-    if options[2] == "True":
-        try_boolean_sqli(args.url, options)
-    try_login_sqli(args.url)
+    try_url_param_sqli(args.url)
+    # try_login_sqli(args.url)
 
 
 if __name__ == "__main__":

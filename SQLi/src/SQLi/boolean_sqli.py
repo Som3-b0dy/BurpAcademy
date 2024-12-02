@@ -22,13 +22,13 @@ def try_boolean_sqli(url, options: list):
             pld = requests.utils.quote(pld + db_comment)
             r = requests.get(url=url + endp + pld)
             log.logger.info(
-                f"{BLUE}[*]{RESET} Trying blind SQLi "
+                f"{BLUE}[*]{RESET} Trying boolean in-band SQLi "
                 f"on endpoint {url + endp + pld}")
             if r.status_code == 200:
                 # If new page size is bigger, we have found additional content
                 if len(r.text) > len(init_r.text):
                     log.logger.info(
-                        f"{GREEN}[+]{RESET} Confirmed blind SQLi "
+                        f"{GREEN}[+]{RESET} Confirmed boolean in-band SQLi "
                         f"on endpoint {url + endp + pld}")
                     log.logger.info(
                         f"{GREEN}[+]{RESET} New page "
