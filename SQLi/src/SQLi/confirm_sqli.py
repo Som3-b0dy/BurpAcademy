@@ -1,11 +1,12 @@
 import requests
 
 from SQLi.boolean_sqli import *
+from SQLi.union_sqli import *
 from utils.auxiliary import *
 from utils.crawler import *
 
 
-def try_url_param_sqli(url) -> list:
+def try_url_param_sqli(url):
     log = Auxiliary(__name__)
     log.set_config()
     options = [[], ""]
@@ -26,7 +27,7 @@ def try_url_param_sqli(url) -> list:
                             f"{BLUE}[*]{RESET} Possible in-band SQLi "
                             f"is found on endpoint {endp}'{s}")
                         try_boolean_sqli(url, options)
-                        # try_union_sqli(url, options)
+                        try_union_sqli(url, options)
                         break
         else:
             # try boolean_sqli.py
@@ -35,4 +36,3 @@ def try_url_param_sqli(url) -> list:
             log.logger.info(
                 f"{RED}[-]{RESET} Endpoint {endp} "
                 "is likely not vulnerable to SQLi")
-    return options
