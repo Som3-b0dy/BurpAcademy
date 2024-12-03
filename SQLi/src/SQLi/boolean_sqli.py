@@ -10,6 +10,18 @@ payloads = [
 ]
 
 
+# def find_diff(init_r, r):
+#     soup_1 = BeautifulSoup(init_r.text, 'html.parser')
+#     soup_2 = BeautifulSoup(r.text, 'html.parser')
+#     html_1 = soup_1.prettify()
+#     html_2 = soup_2.prettify()
+#     cases = [(html_1, html_2)]
+#     for a,b in cases:
+#         for i,s in enumerate(difflib.ndiff(a,b)):
+#             if s[0]=='+':
+#                 print(u'{}'.format(s[-1]),end='')
+
+
 def try_boolean_sqli(url, options: list):
     log = Auxiliary(__name__)
     log.set_config()

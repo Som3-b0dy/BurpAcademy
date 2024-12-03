@@ -78,5 +78,8 @@ def try_login_password_sqli(url, s, csrf_token):
 def try_login_sqli(url):
     s = requests.Session()
     csrf_token = get_csrf_token(url, s)
-    try_login_username_sqli(url, s, csrf_token)
-    try_login_password_sqli(url, s, csrf_token)
+    result = try_login_username_sqli(url, s, csrf_token)
+    result = try_login_password_sqli(url, s, csrf_token)
+    if not result:
+        log.logger.info(f"{RED}[-]{RESET} Login page "
+                        "is likely not vulnerable to SQLi")
