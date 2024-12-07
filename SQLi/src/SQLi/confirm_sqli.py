@@ -9,7 +9,7 @@ from utils.crawler import *
 def try_url_param_sqli(url):
     log = Auxiliary(__name__)
     log.set_config()
-    options = [[], ""]
+    options = [[], "", "", []]
     endpoints = crawl_webpage_endpoints(url)
     for endp in endpoints:
         r = requests.get(url=url + endp + "'")
