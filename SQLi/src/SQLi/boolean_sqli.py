@@ -25,8 +25,7 @@ payloads = [
 def try_boolean_sqli(url, options: list):
     log = Auxiliary(__name__)
     log.set_config()
-    vuln_endpoints = options[0]
-    db_comment = options[1]
+    vuln_endpoints, db_comment = options[0], options[1]
     init_r = requests.get(url=url)
     for endp in vuln_endpoints:
         for pld in payloads:

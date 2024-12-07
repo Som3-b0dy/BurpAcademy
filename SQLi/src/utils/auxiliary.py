@@ -1,5 +1,14 @@
 import logging
 
+'''
+    options[0] -> endpoints to try SQLi against
+    options[1] -> type of comment used in database
+    options[2] -> number of columns to try union SQLi
+    options[3] -> column indexes that accept string
+'''
+
+options = [[], "", "", []]
+
 RED = "\x1b[31;1m"
 GREEN = "\x1b[32;1m"
 YELLOW = "\x1b[33;1m"
