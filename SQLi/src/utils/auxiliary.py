@@ -18,12 +18,14 @@ RESET = "\x1b[0m"
 
 class Auxiliary:  # Defining a logger template to use
     def __init__(self, moduleName=None):
+        default_name = __name__
         if moduleName:
             self.logger = logging.getLogger(moduleName)
         else:
-            self.logger = logging.getLogger(__name__)
+            self.logger = logging.getLogger(default_name)
 
-    def set_config(self):  # Making a more comfortable logger
+    @staticmethod
+    def set_config():  # Making a more comfortable logger
         logging.basicConfig(
             format='\x1b[33;1m{asctime}\x1b[0m'
             ':{levelname}:'

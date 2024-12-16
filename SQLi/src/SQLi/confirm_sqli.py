@@ -25,7 +25,7 @@ def try_url_param_sqli(url):
                         log.logger.info(
                             f"{BLUE}[*]{RESET} Possible in-band SQLi "
                             f"is found on endpoint {endp}'{s}")
-                        try_boolean_sqli(url, options)
+                        # try_boolean_sqli(url, options)
                         try_union_sqli(url, options)
                         break
         else:
