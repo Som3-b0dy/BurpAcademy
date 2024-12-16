@@ -15,14 +15,15 @@ YELLOW = "\x1b[33;1m"
 BLUE = "\x1b[34;1m"
 RESET = "\x1b[0m"
 
+verbose = False
+
 
 class Auxiliary:  # Defining a logger template to use
     def __init__(self, moduleName=None):
-        default_name = __name__
         if moduleName:
             self.logger = logging.getLogger(moduleName)
         else:
-            self.logger = logging.getLogger(default_name)
+            self.logger = logging.getLogger(__name__)
 
     @staticmethod
     def set_config():  # Making a more comfortable logger

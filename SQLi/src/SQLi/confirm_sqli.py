@@ -15,18 +15,18 @@ def try_url_param_sqli(url):
         if r.status_code == 500:
             log.logger.info(
                 f"{BLUE}[*]{RESET} Possible SQLi is found on endpoint {endp}'")
-            for s in ["--", "%23"]:
-                r_check = requests.get(url=url + endp + "'" + s)
+            for comment in ["--", "%23"]:
+                r_check = requests.get(url=url + endp + "'" + comment)
                 if r_check.status_code == 200:
                     options[0].append(endp)
-                    options[1] = s
+                    options[1] = comment
                     # Trying in-band SQL injections
                     if "'--" or "'#" in r_check.text:
                         log.logger.info(
                             f"{BLUE}[*]{RESET} Possible in-band SQLi "
-                            f"is found on endpoint {endp}'{s}")
-                        # try_boolean_sqli(url, options)
-                        try_union_sqli(url, options)
+                            f"is found on endpoint {endp}'{comment}")
+                        try_boolean_sqli(url, options)
+                        # try_union_sqli(url, options)
                         break
         else:
             # try boolean_sqli.py

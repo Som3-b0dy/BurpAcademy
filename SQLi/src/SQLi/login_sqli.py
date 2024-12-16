@@ -3,7 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from utils.auxiliary import *
+from utils.files import *
 
+# Remake using files
 payloads = [
     "admin'--",
     "admin'#",

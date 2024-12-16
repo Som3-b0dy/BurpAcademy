@@ -15,7 +15,9 @@ def try_data_exfil(url, options: list):
     vuln_endpoints, db_comment, num_cols, str_index = \
         options[0], options[1], options[2], options[3]
     file_1 = File("./utils/txt_files/tables.txt")
+    file_2 = File("./utils/txt_files/columns.txt")
     tables = file_1.open_file()
+    colums = file_2.open_file()
     # for table_line in tables:
     print(tables.readline())
 
