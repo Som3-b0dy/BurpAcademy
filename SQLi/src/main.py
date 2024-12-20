@@ -7,7 +7,7 @@ from utils.parser import *
 
 def main():
     args = parse_args()
-    try_url_param_sqli(args.url)
+    # try_url_param_sqli(args.url)
     try_login_sqli(args.url)
 
 

@@ -19,6 +19,7 @@ def parse_args():  # Initialising our parser for command line arguments
                         help='Increase verbosity of the output',
                         action='store_true')
     args = parser.parse_args()
+    # Rewriting the value of verbose
     utils.auxiliary.verbose = args.verbose
     args = strip_url(args)
     return args

