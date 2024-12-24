@@ -26,7 +26,7 @@ def try_url_param_sqli(url):
                             f"{BLUE}[*]{RESET} Possible in-band SQLi "
                             f"is found on endpoint {endp}'{comment}")
                         try_boolean_sqli(url, options)
-                        # try_union_sqli(url, options)
+                        try_union_sqli(url, options)
                         break
         else:
             # try boolean_sqli.py

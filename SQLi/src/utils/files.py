@@ -15,7 +15,7 @@ class File():  # Making a class to handle files
             log.logger.info(f"{utils.auxiliary.BLUE}[*] "
                             f"{utils.auxiliary.RESET}"
                             f"Opening file {self.path}")
-        self.file = open("./utils/txt_files/" + self.path, "r")
+        self.file = open("./utils/files/" + self.path, "r")
         return self.file
 
     def __del__(self):
